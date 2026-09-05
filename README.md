@@ -86,6 +86,12 @@ VouchPay establishes a **Dual-Layer Verification Protocol** and an **Autonomous 
 
 ---
 
+### 6. Spend Analytics Dashboard
+![Spend Analytics Dashboard](public/screenshots/6_analytics.png)
+> Financial telemetry dashboard displaying total spend metrics, approved payment counts, decline ratios, average transaction sizes, category spend breakdowns, and deduplicated financial analytics.
+
+---
+
 ## 🏗️ System Architecture & Workflow
 
 ```
