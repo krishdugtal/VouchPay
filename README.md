@@ -56,20 +56,33 @@ VouchPay establishes a **Dual-Layer Verification Protocol** and an **Autonomous 
 
 ## 🖥️ Application Modules & Pages
 
-1. **VouchPay's Homepage (`/`)**
-   - High-impact landing portal featuring real-time system telemetry metrics, a 7-day agent activity trend graph, live infrastructure status indicators, and an interactive in-browser AI agent simulator.
+### 1. VouchPay's Homepage (`/`)
+![VouchPay Homepage](public/screenshots/1_homepage.png)
+*High-impact landing portal featuring real-time system telemetry metrics, a 7-day agent activity trend graph, live infrastructure status indicators, and an interactive in-browser AI agent simulator.*
 
-2. **Interactive Demo Hub & Workflow Selector (`/demo`)**
-   - Central entry hub allowing users and hackathon judges to launch into any module of the application—including Mandate Configuration, Bounded AI Agent Chat, or the Audit Trail.
+---
 
-3. **Catalog & Mandate Setup (`/catalog-setup`)**
-   - Financial governance control panel where consumers define active spend mandates (spending limits up to ₹10,00,000, category permissions, and expiration dates) and merchants register catalog listings with price ceilings.
+### 2. Interactive Demo Hub & Workflow Selector (`/demo`)
+![Interactive Demo Hub](public/screenshots/2_demo_hub.png)
+*Central entry hub allowing users and hackathon judges to launch into any module of the application—including Mandate Configuration, Bounded AI Agent Chat, or the Audit Trail.*
 
-4. **AI Agent Chat (`/chat`)**
-   - Bounded conversational commerce interface powered by Google Gemini 3.6 Flash and SerpAPI, where AI agents parse natural language purchase prompts, search live market listings, enforce active spend mandates, and generate 1-click Razorpay test payment links.
+---
 
-5. **Audit Trail (`/audit-trail`)**
-   - Real-time immutable event log dashboard streaming plain-English reasoning, transaction IDs, payment capture statuses, filterable time ranges, and automated webhook recovery retries.
+### 3. Catalog & Mandate Setup (`/catalog-setup`)
+![Catalog & Mandate Setup](public/screenshots/3_catalog_setup.png)
+*Financial governance control panel where consumers define active spend mandates (spending limits up to ₹10,00,000, category permissions, and expiration dates) and merchants register catalog listings with price ceilings.*
+
+---
+
+### 4. AI Agent Chat (`/chat`)
+![AI Agent Chat](public/screenshots/4_ai_chat.png)
+*Bounded conversational commerce interface powered by Google Gemini 3.6 Flash and SerpAPI, where AI agents parse natural language purchase prompts, search live market listings, enforce active spend mandates, and generate 1-click Razorpay test payment links.*
+
+---
+
+### 5. Audit Trail (`/audit-trail`)
+![Audit Trail](public/screenshots/5_audit_trail.png)
+*Real-time immutable event log dashboard streaming plain-English reasoning, transaction IDs, payment capture statuses, filterable time ranges, and automated webhook recovery retries.*
 
 ---
 
