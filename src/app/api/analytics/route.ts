@@ -19,23 +19,49 @@ export async function GET() {
       mandatesMap[m.id] = { ...m, allowed_categories: cats };
     });
 
-    // 1. Filter ONLY actual successful payments (status === 'success')
-    const successfulActions = rawActions.filter((a) => a.status === 'success');
-    
-    // 2. Filter declined transactions (status === 'declined' OR action_type === 'purchase_declined')
-    const declinedActions = rawActions.filter(
-      (a) => a.status === 'declined' || a.action_type === 'purchase_declined'
+    // 1. Filter ONLY actual successful payments (status === 'success' and action_type is an approved payment/retry)
+    const rawSuccessful = rawActions.filter(
+      (a) => a.status === 'success' && a.action_type !== 'purchase_attempt'
     );
 
-    // Total Amount Spent: sum of amount for status === 'success' ONLY
+    // Deduplicate by transaction_group_id or razorpay_order_id to guarantee single count per order
+    const uniqueSuccessMap = new Map<string, any>();
+    rawSuccessful.forEach((a) => {
+      const key = a.transaction_group_id || a.razorpay_order_id || `id_${a.id}`;
+      if (!uniqueSuccessMap.has(key)) {
+        uniqueSuccessMap.set(key, a);
+      }
+    });
+    const successfulActions = Array.from(uniqueSuccessMap.values());
+
+    // 2. Filter declined transactions (status === 'declined' OR action_type === 'purchase_declined')
+    const rawDeclined = rawActions.filter(
+      (a) => a.status === 'declined' || a.action_type === 'purchase_declined'
+    );
+    const uniqueDeclinedMap = new Map<string, any>();
+    rawDeclined.forEach((a) => {
+      const key = a.transaction_group_id || a.razorpay_order_id || `id_${a.id}`;
+      if (!uniqueDeclinedMap.has(key)) {
+        uniqueDeclinedMap.set(key, a);
+      }
+    });
+    const declinedActions = Array.from(uniqueDeclinedMap.values());
+
+    // Total Amount Spent: sum of amount for approved successful payments ONLY
     const totalSpent = successfulActions.reduce((sum, a) => sum + (a.amount || 0), 0);
     const successfulCount = successfulActions.length;
     const declinedCount = declinedActions.length;
-    const totalDecisions = rawActions.length;
-    const approvalRate = totalDecisions > 0 ? Math.round((successfulCount / totalDecisions) * 100) : 0;
+
+    // Total unique decisions evaluated
+    const uniqueAttempts = new Set(rawActions.map((a) => a.transaction_group_id || a.razorpay_order_id || `id_${a.id}`));
+    const totalDecisions = Math.max(successfulCount + declinedCount, uniqueAttempts.size);
+    const approvalRate = (successfulCount + declinedCount) > 0 
+      ? Math.round((successfulCount / (successfulCount + declinedCount)) * 100) 
+      : 0;
 
     // Average Transaction Size: totalSpent / successfulCount
     const avgTransactionSize = successfulCount > 0 ? Math.round(totalSpent / successfulCount) : 0;
+
 
     // 3. Category Breakdown (for successful payments)
     const categoryMap: { [cat: string]: number } = {};

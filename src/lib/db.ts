@@ -99,8 +99,14 @@ export async function initDb() {
           console.error('Error backfilling transaction_group_id:', e);
         }
 
+        // Ensure purchase_attempt records are never marked as success in DB
+        try {
+          await client.execute("UPDATE agent_actions SET status = 'completed' WHERE action_type = 'purchase_attempt' AND status = 'success'");
+        } catch {}
+
         initialized = true;
       } catch (err) {
+
         console.error('Database initialization error:', err);
       }
     })();

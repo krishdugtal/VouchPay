@@ -49,7 +49,6 @@ export default function Navbar() {
     { label: 'Audit Trail', href: '/audit-trail' },
     { label: 'Analytics', href: '/analytics' },
     { label: 'Docs', href: '/docs' },
-    { label: 'Working', href: '/#how-it-works' },
   ];
 
   const isActive = (href: string) => {

@@ -18,14 +18,25 @@ export async function POST(request: Request) {
     }
 
     const existing: any = await db.get(
-      "SELECT * FROM agent_actions WHERE razorpay_order_id = ? AND (status = 'pending' OR status IS NULL)",
+      "SELECT * FROM agent_actions WHERE razorpay_order_id = ? AND action_type IN ('purchase_approved', 'retry_attempt') AND status != 'success'",
       [order_id]
     );
 
     if (existing) {
       const updatedReasoning = `${existing.reasoning} (Payment Captured: ${payment_id || 'Redirect'})`;
       await db.run("UPDATE agent_actions SET status = 'success', reasoning = ? WHERE id = ?", [updatedReasoning, existing.id]);
+      await db.run("UPDATE agent_actions SET status = 'completed' WHERE razorpay_order_id = ? AND action_type = 'purchase_attempt'", [order_id]);
+    } else {
+      // Fallback: If only purchase_attempt existed under this order_id
+      const attempt: any = await db.get(
+        "SELECT * FROM agent_actions WHERE razorpay_order_id = ? AND action_type = 'purchase_attempt'",
+        [order_id]
+      );
+      if (attempt) {
+        await db.run("UPDATE agent_actions SET status = 'completed' WHERE id = ?", [attempt.id]);
+      }
     }
+
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

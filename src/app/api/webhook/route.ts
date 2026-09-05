@@ -90,6 +90,10 @@ export async function POST(request: Request) {
           `UPDATE agent_actions SET status = 'success', reasoning = ? WHERE id = ?`,
           [updatedReasoning, existingAction.id]
         );
+        await db.run(
+          `UPDATE agent_actions SET status = 'completed' WHERE razorpay_order_id = ? AND action_type = 'purchase_attempt'`,
+          [orderId]
+        );
         console.log(`[Webhook] Updated existing action #${existingAction.id} to success.`);
       } else {
         // 2. Try finding recent pending purchase_approved action (in case orderId mismatch occurred)

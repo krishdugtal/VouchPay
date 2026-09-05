@@ -73,9 +73,6 @@ export default function RootLayout({
                 <Link href="/docs" className="hover:text-white transition-colors">
                   Docs
                 </Link>
-                <Link href="/#how-it-works" className="hover:text-white transition-colors">
-                  Working
-                </Link>
               </nav>
 
               {/* Right Controls: System Status + Get Started CTA */}

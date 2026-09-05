@@ -237,7 +237,7 @@ export default function AuditTrailPage() {
       case 'recovery_abandoned':
         return <span className="px-2.5 py-1 text-xs font-bold bg-zinc-800 text-zinc-400 border border-zinc-700 rounded-md">RECOVERY ABANDONED</span>;
       case 'purchase_attempt':
-        return <span className="px-2.5 py-1 text-xs font-bold bg-indigo-500/10 text-indigo-300 border border-indigo-500/25 rounded-md">PURCHASE ATTEMPT</span>;
+        return <span className="px-2.5 py-1 text-xs font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/25 rounded-md">PURCHASE ATTEMPT</span>;
       case 'system_error':
         return <span className="px-2.5 py-1 text-xs font-bold bg-purple-500/10 text-purple-300 border border-purple-500/25 rounded-md">SYSTEM ERROR</span>;
       default:

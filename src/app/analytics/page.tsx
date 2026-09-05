@@ -315,7 +315,13 @@ export default function AnalyticsPage() {
                         </td>
                         <td className="px-4 py-3 whitespace-nowrap">
                           <span className={`px-2 py-0.5 text-[11px] font-bold rounded ${
-                            a.status === 'success' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'
+                            a.action_type === 'purchase_attempt'
+                              ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
+                              : a.action_type === 'purchase_approved' || a.status === 'success'
+                              ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                              : a.action_type === 'retry_attempt' || a.status === 'pending'
+                              ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                              : 'bg-red-500/10 text-red-400 border border-red-500/20'
                           }`}>
                             {a.action_type}
                           </span>
