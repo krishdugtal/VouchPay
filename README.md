@@ -1,125 +1,144 @@
 # VouchPay 🛒⚡
 > **Track**: AI Growth & Agentic Commerce | **Hackathon**: Razorpay AI Buildathon 2026
 
-An agentic commerce layer that makes merchants transactable by AI agents (or humans via chat). Every purchase is bounded by a pre-set spend mandate, fully logged in an explainable audit trail, and automatically recovered if a payment fails. Built using Next.js 14+ (App Router), TypeScript, Tailwind CSS, Turso / LibSQL via `@libsql/client`, Razorpay Test Mode SDK, and Google Gemini API (`gemini-3.6-flash`).
+VouchPay is an **agentic commerce infrastructure layer** that makes merchants transacting-ready for autonomous AI agents while giving consumers 100% financial safety and transparency. Every purchase initiated by an AI agent is bounded by user-defined **Spend Mandates**, validated in real time against merchant catalogs, logged in an explainable **Audit Trail**, and automatically recovered via **Razorpay Webhooks** if a payment fails.
+
+Built with **Next.js 16 (App Router)**, **TypeScript**, **Tailwind CSS**, **Turso / LibSQL via `@libsql/client`**, **Razorpay Test Mode SDK**, and **Google Gemini 3.6 Flash**.
 
 ---
 
-## 🌟 Key Features & Architecture
+## 🖼️ Application Showcase & Interface Screenshots
 
-1. **Spend Mandates (Boundaries & Safety)**:
-   - Merchants/Users define a active spend mandate: `max_amount` (up to ₹10,00,000), `allowed_categories` (multi-select), and `expires_at` date.
-   - Dual-layer compliance validation: verified both by Gemini AI agent reasoning AND enforced server-side before Razorpay Order creation.
-
-2. **Natural Language AI Chat (`/chat`)**:
-   - Natural language shopping interface powered by Google Gemini AI (`gemini-3.6-flash`) with structured JSON mode (`responseSchema`).
-   - Generates instant payment checkout links for approved items, or displays explainable decline reasons.
-
-3. **Autonomous Payment Failure Recovery**:
-   - Razorpay Webhook listener with HMAC-SHA256 signature verification (`x-razorpay-signature`).
-   - On `payment.captured`: logs success idempotently.
-   - On `payment.failed`:
-     - **Path (a) Auto-Retry**: Automatically creates a new Razorpay order & payment link if mandate is still valid.
-     - **Path (b) Re-authorization Required**: Blocks retries if the mandate is expired or spending limit would be exceeded.
-     - **Path (c) Abandon Gracefully**: Prevents infinite loops by abandoning after 1 retry attempt.
-     - **Unmatched Orders**: Gracefully logs failures for unlinked test orders with `200 OK` responses.
-
-4. **Live Audit Trail Dashboard (`/audit-trail`)**:
-   - Real-time audit dashboard polling `/api/audit` every 3 seconds.
-   - Shows action types (`purchase_approved`, `purchase_declined`, `payment_failed`, `retry_attempt`, `recovery_abandoned`, `system_error`), reasoning, amounts, status, and linked Razorpay Order IDs.
+### 1. Homepage & Live Telemetry Dashboard
+![Homepage & Live Telemetry Dashboard](public/screenshots/homepage_telemetry.png)
+*The VouchPay landing page features a dual-column hero layout with an interactive multi-tab showcase card. Visitors can view real-time telemetry metrics (total actions, payment volume, blocks enforced, 100% success rate, and 7-day SVG trend chart) or run an interactive in-browser AI agent simulator.*
 
 ---
 
-## 🛠️ Tech Stack
-
-- **Framework**: Next.js 14+ (App Router), React 19, TypeScript
-- **Styling**: Vanilla Tailwind CSS v4 (Dark-mode, glassmorphism, responsive grid)
-- **Database**: Turso / LibSQL via `@libsql/client` (Serverless hosted SQLite database compatible with Vercel)
-
-- **Payments**: Razorpay Node SDK (Test Mode Orders, Payment Links, Webhooks)
-- **AI Agent**: Google Gemini API (`@google/generative-ai` SDK, `gemini-3.6-flash`)
+### 2. Catalog & Spend Mandate Setup (`/catalog-setup`)
+![Catalog & Spend Mandate Setup](public/screenshots/catalog_mandates.png)
+*The Catalog & Mandate Setup dashboard enables consumers to define explicit spending boundaries (`max_amount` up to ₹10,00,000, multi-select category permissions, and expiration dates) while merchants register product listings with maximum acceptable price limits.*
 
 ---
 
-## 📋 Prerequisites & Environment Setup
+### 3. Bounded AI Agent Chat (`/chat`) — Mandate Bounds
+![Bounded AI Agent Chat Mandate Bounds](public/screenshots/agent_chat_prompts.png)
+*The natural language shopping interface displays active spend mandate bounds directly in the top header (e.g. `Shoes — ₹10,000 limit`). Consumers can select target mandates or click sample prompts (`buy me earphones under ₹1000`, `order me a protein shake under ₹500`, or `buy a luxury watch for ₹50,000`).*
+
+---
+
+### 4. Real-Time Market Search & Checkout Execution
+![Live Market Search & Checkout Execution](public/screenshots/agent_chat_checkout.png)
+*When a request is submitted, Google Gemini API performs real-time market search for matching products under the mandate limit, presenting live listings with thumbnails, price badges, merchant sources, and 1-click **Select & Purchase** Razorpay test checkout buttons.*
+
+---
+
+### 5. Explainable Audit Trail Dashboard (`/audit-trail`)
+![Explainable Audit Trail Dashboard](public/screenshots/audit_trail_dashboard.png)
+*The live Audit Trail dashboard streams system action logs in real time. Every decision is categorized (`PURCHASE ATTEMPT`, `PURCHASE APPROVED`, `PURCHASE DECLINED`, `RETRY ATTEMPT`, `RECOVERY ABANDONED`) and accompanied by plain-English reasoning detailing why an action was taken or blocked.*
+
+---
+
+## ⚡ Core Architecture & Key Features
+
+### 1. Spend Mandate Engine (Financial Safety Boundaries)
+- **Granular Controls**: Users define `max_amount` (spending cap), `allowed_categories` (e.g. `[\"Electronics\", \"Fitness\"]`), and `expires_at` timestamps.
+- **Dual-Layer Validation Protocol**:
+  1. **AI Reasoning Check**: Google Gemini (`gemini-3.6-flash` in strict `responseSchema` JSON mode) evaluates requests against active mandate rules.
+  2. **Server-Side Enforcement**: `/api/checkout` re-verifies price limits and category permissions before generating any Razorpay order.
+
+### 2. Autonomous Webhook Payment Failure Recovery
+- **HMAC-SHA256 Security**: Integrates Razorpay Webhook listener (`/api/webhook`) with strict signature verification.
+- **Automated Event Handling**:
+  - **`payment.captured`**: Updates action status to `success` idempotently without double-counting.
+  - **`payment.failed`**:
+    - **Path A (Auto-Retry)**: Generates a new Razorpay order & payment link automatically if the mandate remains active.
+    - **Path B (Re-authorization Block)**: Blocks retries if the mandate is expired or limits would be exceeded.
+    - **Path C (Abandon Gracefully)**: Prevents infinite retry loops by abandoning after 1 failed retry attempt.
+
+### 3. Serverless Hosted Database Layer (Turso / LibSQL)
+- Powered by `@libsql/client` (LibSQL / Turso).
+- Supports seamless async queries over HTTP/WebSockets in production on Vercel, while falling back gracefully to local SQLite (`file:db.sqlite`) in development.
+
+---
+
+## 🛠️ Tech Stack & Dependencies
+
+| Layer | Technology | Purpose |
+| :--- | :--- | :--- |
+| **Framework** | Next.js 16 (App Router, Turbopack) | Serverless React Application Framework |
+| **Language** | TypeScript | Strict static typing across API routes & components |
+| **Styling** | Vanilla CSS / Tailwind CSS | Dark-mode visual aesthetic, glassmorphism, responsive grid |
+| **Database** | `@libsql/client` (Turso LibSQL) | Serverless hosted SQLite database compatible with Vercel |
+| **Payments** | Razorpay Node.js SDK | Sandbox Test Orders, Payment Links, Webhook signatures |
+| **AI Model** | Google Gemini API (`gemini-3.6-flash`) | Natural language intent evaluation & structured JSON reasoning |
+
+---
+
+## 📋 Environment Configuration (`.env.local`)
 
 Create a `.env.local` file in the workspace root with the following variables:
 
 ```env
-# Razorpay Test Mode API Credentials (from Razorpay Dashboard > Settings > API Keys)
-RAZORPAY_KEY_ID=your_razorpay_key_id
-RAZORPAY_KEY_SECRET=your_razorpay_key_secret
+# Razorpay Test Mode API Credentials (Razorpay Dashboard > Settings > API Keys)
+RAZORPAY_KEY_ID=rzp_test_...
+RAZORPAY_KEY_SECRET=your_razorpay_secret
 
-# Razorpay Webhook Secret (configured when setting up Webhooks in Razorpay Dashboard)
+# Razorpay Webhook Secret (Razorpay Dashboard > Webhooks)
 RAZORPAY_WEBHOOK_SECRET=your_webhook_secret
 
-# Google Gemini API Key (from Google AI Studio)
+# Google Gemini API Key (Google AI Studio)
 GEMINI_API_KEY=your_gemini_api_key
-```
 
-> **Note**: `.env.local` is listed in `.gitignore` and must never be committed.
+# Hosted Database Credentials (Optional for local dev, Required for Vercel)
+TURSO_DATABASE_URL=libsql://your-db.turso.io
+TURSO_AUTH_TOKEN=your_turso_auth_token
+```
 
 ---
 
-## 🚀 Running the Application Locally
+## 🚀 Running Locally
 
-1. **Install dependencies**:
+1. **Clone repository & install dependencies**:
    ```bash
+   git clone https://github.com/krishdugtal/VouchPay.git
+   cd VouchPay
    npm install
    ```
 
-2. **Start the Next.js development server**:
+2. **Start Next.js development server**:
    ```bash
    npm run dev
    ```
-   The app will run at `http://localhost:3001` (or `http://localhost:3000` / `3002`).
+   Open `http://localhost:3000` (or `http://localhost:3001`) in your browser.
 
-3. **(Optional) Run Webhook via ngrok for Live Payment Events**:
+3. **(Optional) Test Webhooks with ngrok**:
    ```bash
-   ngrok http 3001
+   ngrok http 3000
    ```
-   Add the ngrok URL to your Razorpay Dashboard under **Webhooks**:
-   `https://<your-ngrok-subdomain>.ngrok-free.app/api/webhook`
-   Set the secret to match `RAZORPAY_WEBHOOK_SECRET` and subscribe to `payment.captured` and `payment.failed` events.
+   Set Webhook URL in Razorpay Dashboard to `https://<subdomain>.ngrok-free.app/api/webhook` and subscribe to `payment.captured` and `payment.failed`.
 
 ---
 
-## 📖 Pages Included
+## 🧪 Judge Demo Walkthrough
 
-1. `/catalog-setup`
-   - Form to register catalog items (Name, Price, Category).
-   - Form to configure active spend mandate (`max_amount` up to ₹10,00,000, `allowed_categories`, `expires_at`).
-   - Includes a sandbox checkout testing card.
+1. **Configure Mandate & Catalog (`/catalog-setup`)**:
+   - Register product: `Shoes` | Price: `₹7,595` | Category: `Sports & Outdoors`.
+   - Set Spend Mandate: `Max Limit: ₹10,000` | Allowed: `Sports & Outdoors`, `Fitness` | Expiry: Future date.
 
-2. `/chat`
-   - Interactive AI agent chat interface.
-   - Displays active mandate bounds in header.
-   - Supports 1-click demo prompts.
-   - Generates Razorpay Sandbox Payment Links inside chat bubbles.
+2. **Test Bounded AI Shopping (`/chat`)**:
+   - Select the `Shoes (₹10,000)` mandate pill.
+   - Send: `"buy me Nike running shoes under 9999"`.
+   - Observe **Gemini AI Approval**: Live market listings fetched via SerpAPI, displaying Razorpay checkout links.
+   - Send: `"buy a luxury watch for ₹50,000"`.
+   - Observe **Mandate Block**: Immediate decline with explicit reasoning (*Exceeds ₹10,000 spend cap*).
 
-3. `/audit-trail`
-   - Real-time audit timeline and metrics cards.
-   - Searchable, filterable by status and action type.
+3. **Test Razorpay Sandbox Payment & Webhooks**:
+   - Click **Select & Purchase** on an approved item.
+   - Complete payment on Razorpay Sandbox popup (Netbanking / Cards).
+   - Check `/audit-trail` to view live event transition to **SUCCESS**.
 
 ---
 
-## 🧪 Demo Walkthrough Guide for Judges
-
-1. **Step 1: Setup Mandate & Catalog**
-   - Go to `/catalog-setup`.
-   - Add a product: `Earphones` | Price: `₹850` | Category: `Electronics`.
-   - Set a mandate: Max Amount: `₹5,000` | Allowed Categories: Check `Electronics`, `Fitness` | Expiry: Future date.
-
-2. **Step 2: Test AI Agent Reasoning (`/chat`)**
-   - Click `"buy me earphones under ₹1000"`.
-   - Observe Gemini agent approval: `PURCHASE APPROVED` badge + reasoning + Razorpay payment link.
-   - Click `"buy a luxury watch for ₹50,000"`.
-   - Observe decline: `TRANSACTION DECLINED` badge + reasoning explaining budget breach.
-
-3. **Step 3: Test Payment & Webhooks**
-   - Click **"Pay via Razorpay Sandbox"** on an approved item.
-   - Complete payment using Razorpay Test Mode (Netbanking / Cards).
-   - Return to `/chat` and navigate to `/audit-trail` to verify the `payment.captured` event transition to `SUCCESS`.
-
-4. **Step 4: Inspect Audit Trail (`/audit-trail`)**
-   - View live logs showing every decision, mandate check, payment link, and webhook event.
+## 📄 License & Credits
+Built for **Razorpay AI Buildathon 2026**. Powered by Razorpay, Google Gemini, Next.js, and Turso.
