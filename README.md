@@ -430,6 +430,6 @@ Follow this 4-step sequence to test VouchPay during judge evaluation:
 
 Built with ❤️ for **Razorpay AI Buildathon 2026**.
 
-- **Author**: Krish Dugtal
+- **Author**: Krishved Singh Dugtal
 - **Repository**: [https://github.com/krishdugtal/VouchPay.git](https://github.com/krishdugtal/VouchPay.git)
 - **License**: MIT License

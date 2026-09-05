@@ -2,6 +2,7 @@
   "name": "vouchpay",
   "version": "0.1.0",
   "private": true,
+  "author": "Krishved Singh Dugtal",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
