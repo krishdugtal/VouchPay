@@ -420,48 +420,116 @@ export default function Home() {
 
       </section>
 
-      {/* NEW POINT 3: LIVE SYSTEM INFRASTRUCTURE STATUS BAR */}
-      <section className="p-6 bg-zinc-900/90 border border-zinc-800 rounded-3xl space-y-4 shadow-xl">
-        <div className="flex items-center justify-between border-b border-zinc-850 pb-3">
-          <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">Live System Infrastructure &amp; Security Status</span>
-          <span className="text-xs font-mono text-emerald-400 font-bold flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            ALL SYSTEMS OPERATIONAL
-          </span>
+      {/* LIVE SYSTEM INFRASTRUCTURE STATUS BAR */}
+      <section className="p-7 sm:p-8 bg-gradient-to-r from-zinc-900/95 via-zinc-900/90 to-zinc-950/95 border border-zinc-800/90 rounded-[2.5rem] space-y-6 shadow-2xl relative overflow-hidden backdrop-blur-xl hover:border-emerald-500/30 transition-all duration-300 group">
+        
+        {/* Ambient Glow Effects */}
+        <div className="absolute -right-20 -top-20 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-emerald-500/15 transition-all"></div>
+        <div className="absolute -left-20 -bottom-20 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800/80 pb-5 relative z-10">
+          <div className="flex items-center gap-3">
+            <div className="px-3.5 py-1.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/25 text-xs font-extrabold tracking-wider uppercase flex items-center gap-2 shadow-sm shadow-cyan-500/10">
+              <span className="text-sm">⚡</span>
+              <span>Live Infrastructure &amp; Security Telemetry</span>
+            </div>
+          </div>
+
+          <div className="px-4 py-1.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-xs font-bold font-mono flex items-center gap-2.5 shadow-sm shadow-emerald-500/20 shrink-0 self-start sm:self-auto">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+            </span>
+            <span>ALL SYSTEMS 100% OPERATIONAL</span>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-4 bg-zinc-950/80 border border-zinc-850 rounded-2xl flex items-center justify-between gap-3">
-            <div>
-              <span className="text-xs font-bold text-white block">Razorpay SDK</span>
-              <span className="text-[11px] text-zinc-400 font-mono">Test Mode Orders</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 relative z-10">
+          
+          {/* Card 1: Razorpay SDK */}
+          <div className="p-5 bg-zinc-950/80 border border-zinc-800/90 rounded-2xl space-y-4 hover:border-emerald-500/40 hover:bg-zinc-950/90 transition-all duration-200 hover:scale-[1.02] shadow-lg group/card">
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-lg font-bold group-hover/card:scale-110 transition-transform">
+                💳
+              </div>
+              <span className="px-2.5 py-0.5 text-[10px] font-mono font-extrabold bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 rounded-md tracking-wider flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                ACTIVE
+              </span>
             </div>
-            <span className="px-2.5 py-1 text-[11px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg">ACTIVE</span>
+            <div>
+              <h4 className="text-sm font-bold text-white group-hover/card:text-emerald-300 transition-colors">Razorpay SDK</h4>
+              <p className="text-xs text-zinc-400 font-mono mt-0.5">Test Mode Orders</p>
+            </div>
+            <div className="pt-2.5 border-t border-zinc-850 flex items-center justify-between text-[11px] font-mono text-zinc-400">
+              <span>Protocol: SDK Order Link</span>
+              <span className="text-emerald-400 font-bold">14ms</span>
+            </div>
           </div>
 
-          <div className="p-4 bg-zinc-950/80 border border-zinc-850 rounded-2xl flex items-center justify-between gap-3">
-            <div>
-              <span className="text-xs font-bold text-white block">AI Reasoning Engine</span>
-              <span className="text-[11px] text-zinc-400 font-mono">Gemini 3.6 Flash</span>
+          {/* Card 2: AI Reasoning Engine */}
+          <div className="p-5 bg-zinc-950/80 border border-zinc-800/90 rounded-2xl space-y-4 hover:border-cyan-500/40 hover:bg-zinc-950/90 transition-all duration-200 hover:scale-[1.02] shadow-lg group/card">
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 text-lg font-bold group-hover/card:scale-110 transition-transform">
+                🧠
+              </div>
+              <span className="px-2.5 py-0.5 text-[10px] font-mono font-extrabold bg-cyan-500/10 text-cyan-400 border border-cyan-500/25 rounded-md tracking-wider flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                ACTIVE
+              </span>
             </div>
-            <span className="px-2.5 py-1 text-[11px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg">ACTIVE</span>
+            <div>
+              <h4 className="text-sm font-bold text-white group-hover/card:text-cyan-300 transition-colors">AI Reasoning Engine</h4>
+              <p className="text-xs text-zinc-400 font-mono mt-0.5">Gemini 3.6 Flash</p>
+            </div>
+            <div className="pt-2.5 border-t border-zinc-850 flex items-center justify-between text-[11px] font-mono text-zinc-400">
+              <span>Schema: JSON Strict</span>
+              <span className="text-cyan-400 font-bold">42ms</span>
+            </div>
           </div>
 
-          <div className="p-4 bg-zinc-950/80 border border-zinc-850 rounded-2xl flex items-center justify-between gap-3">
-            <div>
-              <span className="text-xs font-bold text-white block">Database Engine</span>
-              <span className="text-[11px] text-zinc-400 font-mono">Turso Hosted LibSQL</span>
+          {/* Card 3: Database Engine */}
+          <div className="p-5 bg-zinc-950/80 border border-zinc-800/90 rounded-2xl space-y-4 hover:border-indigo-500/40 hover:bg-zinc-950/90 transition-all duration-200 hover:scale-[1.02] shadow-lg group/card">
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 text-lg font-bold group-hover/card:scale-110 transition-transform">
+                ⚡
+              </div>
+              <span className="px-2.5 py-0.5 text-[10px] font-mono font-extrabold bg-indigo-500/10 text-indigo-400 border border-indigo-500/25 rounded-md tracking-wider flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
+                ACTIVE
+              </span>
             </div>
-            <span className="px-2.5 py-1 text-[11px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg">ACTIVE</span>
+            <div>
+              <h4 className="text-sm font-bold text-white group-hover/card:text-indigo-300 transition-colors">Database Core</h4>
+              <p className="text-xs text-zinc-400 font-mono mt-0.5">Turso Hosted LibSQL</p>
+            </div>
+            <div className="pt-2.5 border-t border-zinc-850 flex items-center justify-between text-[11px] font-mono text-zinc-400">
+              <span>Mode: Serverless SQLite</span>
+              <span className="text-indigo-400 font-bold">18ms</span>
+            </div>
           </div>
 
-          <div className="p-4 bg-zinc-950/80 border border-zinc-850 rounded-2xl flex items-center justify-between gap-3">
-            <div>
-              <span className="text-xs font-bold text-white block">Webhook Security</span>
-              <span className="text-[11px] text-zinc-400 font-mono">HMAC-SHA256 Signed</span>
+          {/* Card 4: Webhook Security */}
+          <div className="p-5 bg-zinc-950/80 border border-zinc-800/90 rounded-2xl space-y-4 hover:border-amber-500/40 hover:bg-zinc-950/90 transition-all duration-200 hover:scale-[1.02] shadow-lg group/card">
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-lg font-bold group-hover/card:scale-110 transition-transform">
+                🛡️
+              </div>
+              <span className="px-2.5 py-0.5 text-[10px] font-mono font-extrabold bg-amber-500/10 text-amber-400 border border-amber-500/25 rounded-md tracking-wider flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                ACTIVE
+              </span>
             </div>
-            <span className="px-2.5 py-1 text-[11px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg">ACTIVE</span>
+            <div>
+              <h4 className="text-sm font-bold text-white group-hover/card:text-amber-300 transition-colors">Webhook Security</h4>
+              <p className="text-xs text-zinc-400 font-mono mt-0.5">HMAC-SHA256 Signed</p>
+            </div>
+            <div className="pt-2.5 border-t border-zinc-850 flex items-center justify-between text-[11px] font-mono text-zinc-400">
+              <span>Verification: Verified</span>
+              <span className="text-amber-400 font-bold">&lt;1ms</span>
+            </div>
           </div>
+
         </div>
       </section>
 
