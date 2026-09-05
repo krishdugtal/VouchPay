@@ -1,6 +1,8 @@
 # VouchPay 🛒⚡
-> **Track**: AI Growth & Agentic Commerce | **Hackathon**: Razorpay AI Buildathon 2026
+> **Track**: AI Growth & Agentic Commerce | **Hackathon**: Razorpay AI Buildathon 2026  
+> 🌐 **Live Demo URL**: [https://vouch-pay-jet.vercel.app/](https://vouch-pay-jet.vercel.app/)
 
+[![Live Deployment](https://img.shields.io/badge/Vercel-Live_Deployment-000000?style=flat-square&logo=vercel)](https://vouch-pay-jet.vercel.app/)
 [![Next.js](https://img.shields.io/badge/Next.js-16.3-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![Razorpay SDK](https://img.shields.io/badge/Razorpay-Node_SDK-02042B?style=flat-square&logo=razorpay)](https://razorpay.com/)
